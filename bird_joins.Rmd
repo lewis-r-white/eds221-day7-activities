@@ -91,16 +91,15 @@ Learn a new function on your own! Use dplyr::relocate() to move the new survey_m
 
 
 ```{r}
-bird_observations_new <- bird_observations |> 
+bird_observations_new <- bird_observations %>%
   rename(birds_obs_notes = notes) %>%
   left_join(taxalist, by = "species_id") %>%
   left_join(sites, by = "site_id") %>%
-  left_join(surveys, by = "site_id") %>%
+  left_join(surveys, by = c("site_id", "survey_id")) %>%
   select(survey_date, common_name, park_name, bird_count) %>%
   mutate(survey_month = lubridate::month(survey_date)) %>%
   mutate(survey_month = as.factor(survey_month)) %>%
   relocate(survey_month, .after = survey_date)
-  
 ```
 
 Find the total number of birds observed by park and month (i.e., you’ll group_by(park_name, survey_month))
